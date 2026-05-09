@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform player;
-    public float distance = 15f;  // changed from 6f to start zoomed out
+    public float distance = 15f;
     public float height = 3f;
     public float smoothSpeed = 10f;
 
@@ -28,11 +28,9 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        // Zoom
         distance -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * distance;
         distance = Mathf.Clamp(distance, minDistance, maxDistance);
 
-        // Your original code untouched
         yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
         pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
         pitch = Mathf.Clamp(pitch, minVerticalAngle, maxVerticalAngle);
