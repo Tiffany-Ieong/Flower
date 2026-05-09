@@ -21,7 +21,9 @@ public class TrailFlowerSpawner : MonoBehaviour
 
     void Update()
     {
-        if (ExclusionZone.IsPlayerInside) return;
+        // Do NOT spawn if player is inside the exclusion zone
+        if (ExclusionZone.IsPlayerInside)
+            return;
 
         float distanceMoved = Vector3.Distance(transform.position, lastPosition);
         if (distanceMoved < 0.1f) return;
@@ -41,7 +43,6 @@ public class TrailFlowerSpawner : MonoBehaviour
 
     void SpawnFlower()
     {
-        // Spawn around the player
         Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
         randomOffset.y = 0;
         Vector3 spawnPos = transform.position + randomOffset;
@@ -49,19 +50,10 @@ public class TrailFlowerSpawner : MonoBehaviour
 
         GameObject flower = Instantiate(flowerPrefab, spawnPos, Quaternion.identity);
         flower.transform.rotation = Quaternion.Euler(-90f, Random.Range(0f, 360f), 0f);
-
         float scale = Random.Range(minScale, maxScale);
         flower.transform.localScale = Vector3.one * scale;
 
         BendWhenNear bend = flower.GetComponent<BendWhenNear>();
         if (bend != null) bend.playerTransform = transform;
-
-        // Disable FlowerColorOnTouch so it doesn't color immediately
-        FlowerColorOnTouch colorTouch = flower.GetComponent<FlowerColorOnTouch>();
-        if (colorTouch != null) colorTouch.enabled = false;
-
-        // Add TrailFlower to handle white first then colored logic
-        TrailFlower tf = flower.AddComponent<TrailFlower>();
-        tf.InitAsWhite();
     }
 }

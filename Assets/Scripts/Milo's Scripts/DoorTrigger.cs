@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GhostSpawner : MonoBehaviour
+public class InitialGhostSpawner : MonoBehaviour
 {
     public GameObject ghostPrefab;
     public Transform playerSpawnPoint;
@@ -10,11 +10,9 @@ public class GhostSpawner : MonoBehaviour
     public float spawnDelay = 0.5f;
 
     private bool hasSpawned = false;
-    private Collider triggerCollider;
 
     void Start()
     {
-        triggerCollider = GetComponent<Collider>();
         if (playerSpawnPoint == null)
         {
             GameObject marker = GameObject.FindGameObjectWithTag("PlayerSpawn");
@@ -28,13 +26,13 @@ public class GhostSpawner : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         hasSpawned = true;
-        if (triggerCollider != null) triggerCollider.enabled = false;
         StartCoroutine(SpawnGhost());
     }
 
     private IEnumerator SpawnGhost()
     {
         yield return new WaitForSeconds(spawnDelay);
+
         if (playerSpawnPoint == null) yield break;
 
         ReplayData replay = ReplayLibrary.GetRandomReplay();
@@ -49,18 +47,24 @@ public class GhostSpawner : MonoBehaviour
 
         Vector3 dirToPlayer = player.transform.position - spawnPos;
         dirToPlayer.y = 0f;
-        Quaternion ghostRotation = Quaternion.LookRotation(dirToPlayer);
+        Quaternion ghostRotation = dirToPlayer == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(dirToPlayer);
 
         GameObject newGhost = Instantiate(ghostPrefab, spawnPos, ghostRotation);
-        GhostData data = newGhost.GetComponent<GhostData>();
-        if (data != null)
+
+        ColourAgent newAgent = newGhost.GetComponent<ColourAgent>();
+        Renderer newRenderer = newGhost.GetComponent<Renderer>();
+        if (newAgent != null)
         {
             Color randomColor = Random.ColorHSV(0f, 1f, 0.7f, 1f, 0.8f, 1f);
-            data.Initialize(randomColor);
+            newAgent.SetColor(randomColor);
+            if (newRenderer != null)
+                newRenderer.material.color = randomColor;
         }
 
         ReplayGhost replayGhost = newGhost.GetComponent<ReplayGhost>();
-        if (replayGhost != null) replayGhost.Initialize(replay, spawnPos, ghostRotation);
-        else Destroy(newGhost);
+        if (replayGhost != null)
+            replayGhost.Initialize(replay, spawnPos, ghostRotation);
+        else
+            Destroy(newGhost);
     }
 }

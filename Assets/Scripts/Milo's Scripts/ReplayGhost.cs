@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,17 +18,19 @@ public class ReplayGhost : MonoBehaviour
 
     [Header("Ghost Visuals")]
     public float fadeOutDuration = 1f;
+    private Renderer ghostRenderer;
     private Material ghostMaterial;
     private Color originalColor;
 
-    void Start()
+    [Header("Playback Speed")]
+    [Range(0.2f, 3f)]
+    public float playbackSpeed = 1f;   // 1 = normal, 0.5 = half, 2 = double
+
+    void Awake()
     {
-        Renderer rend = GetComponent<Renderer>();
-        if (rend != null)
-        {
-            ghostMaterial = rend.material;
-            originalColor = ghostMaterial.color;
-        }
+        ghostRenderer = GetComponent<Renderer>();
+        if (ghostRenderer != null)
+            ghostMaterial = ghostRenderer.material;
     }
 
     public void Initialize(ReplayData replayData, Vector3 spawnPos, Quaternion lookAtPlayerRotation)
@@ -66,7 +69,8 @@ public class ReplayGhost : MonoBehaviour
     {
         if (!isPlaying) return;
 
-        float elapsed = Time.time - startTime;
+        // Apply speed multiplier
+        float elapsed = (Time.time - startTime) * playbackSpeed;
         if (elapsed >= duration)
         {
             FinishPlayback();
@@ -96,21 +100,28 @@ public class ReplayGhost : MonoBehaviour
         StartCoroutine(FadeOutAndDestroy());
     }
 
-    private System.Collections.IEnumerator FadeOutAndDestroy()
+    private IEnumerator FadeOutAndDestroy()
     {
         if (ghostMaterial != null)
         {
             float elapsed = 0f;
+            Color startColor = ghostMaterial.color;
             while (elapsed < fadeOutDuration)
             {
                 elapsed += Time.deltaTime;
                 float alpha = 1f - (elapsed / fadeOutDuration);
-                Color c = originalColor;
+                Color c = startColor;
                 c.a = alpha;
                 ghostMaterial.color = c;
                 yield return null;
             }
         }
         Destroy(gameObject);
+    }
+
+    // Optional: set speed after spawn
+    public void SetPlaybackSpeed(float speed)
+    {
+        playbackSpeed = Mathf.Clamp(speed, 0.2f, 3f);
     }
 }

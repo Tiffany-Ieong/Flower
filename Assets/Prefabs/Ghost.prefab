@@ -13,11 +13,12 @@ GameObject:
   - component: {fileID: 3535691093720159401}
   - component: {fileID: 9212086968481335161}
   - component: {fileID: 9159609600877133232}
-  - component: {fileID: 4421637578228807982}
   - component: {fileID: -587608760617489286}
   - component: {fileID: -4928418501001877520}
   - component: {fileID: 3220255273372054376}
-  - component: {fileID: -1267737240048421730}
+  - component: {fileID: 3774626395633086922}
+  - component: {fileID: -2121289499284246395}
+  - component: {fileID: 5029411534941442485}
   m_Layer: 7
   m_Name: Ghost
   m_TagString: Ghost
@@ -137,22 +138,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4421637578228807982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5572359396953937137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b99e7ddde729c994a8ff19ba023c2b19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GhostSpawner
-  ghostPrefab: {fileID: 5572359396953937137}
-  minSpawnDistance: 10
-  maxSpawnDistance: 40
-  spawnDelay: 0.5
 --- !u!65 &-587608760617489286
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -172,7 +157,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 2, z: 4}
+  m_Size: {x: 3, y: 2, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-4928418501001877520
 MonoBehaviour:
@@ -187,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReplayGhost
   fadeOutDuration: 5
+  playbackSpeed: 0.7
 --- !u!114 &3220255273372054376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +192,7 @@ MonoBehaviour:
   minScale: 15
   maxScale: 20
   yOffset: -2
---- !u!114 &-1267737240048421730
+--- !u!114 &3774626395633086922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,7 +201,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 5572359396953937137}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56907f5850f2993418394cf078cb2453, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d16f6396d502bf47a200efb97243bc1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ColourAgent
-  agentColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EditorClassIdentifier: Assembly-CSharp::GhostSpawnerAgent
+  ghostPrefab: {fileID: 5572359396953937137}
+  playerSpawnPoint: {fileID: 0}
+  minSpawnDistance: 15
+  maxSpawnDistance: 30
+  spawnDelay: 0.5
+--- !u!114 &-2121289499284246395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5572359396953937137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d1a4f89ab50372488638a19097c9b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostTrailColour
+--- !u!114 &5029411534941442485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5572359396953937137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5cd6b7ba85ce4f4c90eddb91390612d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostData
+  bodyRenderer: {fileID: 0}
+  trailColor: {r: 0, g: 0, b: 0, a: 0}

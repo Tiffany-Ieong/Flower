@@ -6,8 +6,7 @@ public class ColorManager : MonoBehaviour
 
     [SerializeField] private Color[] colors = { Color.red, Color.purple, Color.blue };
     private int currentIndex = -1;     // -1 = not activated yet
-    public bool colorActivated = false;
-
+    private bool colorActivated = false;
 
     // Reference to the player's ColourAgent (assign in inspector or find at start)
     public ColourAgent playerColourAgent;
